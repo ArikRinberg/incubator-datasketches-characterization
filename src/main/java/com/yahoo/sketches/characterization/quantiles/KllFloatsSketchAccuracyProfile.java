@@ -1,42 +1,32 @@
 package com.yahoo.sketches.characterization.quantiles;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import com.yahoo.sketches.characterization.Properties;
+import com.yahoo.sketches.characterization.quantiles.DataGenerator.Mode;
 import com.yahoo.sketches.kll.KllFloatsSketch;
 
 public class KllFloatsSketchAccuracyProfile extends QuantilesAccuracyProfile {
 
   private int k;
   private float[] inputValues;
-  private float[] queryValues;
-  private boolean useBulk;
+  private DataGenerator gen;
 
   @Override
   void configure(final Properties props) {
     k = Integer.parseInt(props.mustGet("K"));
-    useBulk = Boolean.parseBoolean(props.mustGet("useBulk"));
+    gen = new DataGenerator(Mode.valueOf(props.mustGet("data")));
   }
 
   @Override
   void prepareTrial(final int streamLength) {
-    // prepare input data that will be permuted
     inputValues = new float[streamLength];
-    for (int i = 0; i < streamLength; i++) {
-      inputValues[i] = i;
-    }
-    if (useBulk) {
-      // prepare query data that must remain ordered
-      queryValues = new float[streamLength];
-      for (int i = 0; i < streamLength; i++) {
-        queryValues[i] = i;
-      }
-    }
   }
 
   @Override
   double doTrial() {
-    shuffle(inputValues);
+    gen.fillArray(inputValues);
 
     // build sketch
     final KllFloatsSketch sketch = new KllFloatsSketch(k);
@@ -44,20 +34,15 @@ public class KllFloatsSketchAccuracyProfile extends QuantilesAccuracyProfile {
       sketch.update(inputValues[i]);
     }
 
+    Arrays.sort(inputValues);
+
     // query sketch and gather results
     double maxRankError = 0;
-    if (useBulk) {
-      final double[] estRanks = sketch.getCDF(queryValues);
-      for (int i = 0; i < inputValues.length; i++) {
-        final double trueRank = (double) i / inputValues.length;
-        maxRankError = Math.max(maxRankError, Math.abs(trueRank - estRanks[i]));
-      }
-    } else {
-      for (int i = 0; i < inputValues.length; i++) {
-        final double trueRank = (double) i / inputValues.length;
-        final double estRank = sketch.getRank(i);
-        maxRankError = Math.max(maxRankError, Math.abs(trueRank - estRank));
-      }
+    final FloatRankCalculator rank = new FloatRankCalculator(inputValues);
+    for (int i = 0; i < inputValues.length; i++) {
+      final double trueRank = rank.getRank(inputValues[i]);
+      final double estRank = sketch.getRank(inputValues[i]);
+      maxRankError = Math.max(maxRankError, Math.abs(trueRank - estRank));
     }
     return maxRankError;
   }
