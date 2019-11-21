@@ -1,0 +1,163 @@
+% LaTeX template for Artifact Evaluation V20180713
+%
+% Prepared by 
+% * Grigori Fursin (cTuning foundation, France and dividiti, UK) 2014-2019
+% * Bruce Childers (University of Pittsburgh, USA) 2014
+%
+% See example of this Artifact Appendix in
+%  * SC'17 paper: https://dl.acm.org/citation.cfm?id=3126948
+%  * CGO'17 paper: https://www.cl.cam.ac.uk/~sa614/papers/Software-Prefetching-CGO2017.pdf
+%  * ACM ReQuEST-ASPLOS'18 paper: https://dl.acm.org/citation.cfm?doid=3229762.3229763
+%
+% (C)opyright 2014-2019
+%
+% CC BY 4.0 license
+%
+
+\documentclass{sigplanconf}
+
+\usepackage{hyperref}
+
+\begin{document}
+
+\special{papersize=8.5in,11in}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% When adding this appendix to your paper, 
+% please remove above part
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
+\section{Artifact Appendix}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Abstract}
+
+The artifact contains all the JARs of version 0.12 of the DataSketches
+library, before it moved into Apache (Incubating), as well as configurations
+and shell scripts to run our tests.. It can support the results found in
+Section XXX of our PPoPP'2020 paper Fast Concurrent Data Sketches. To
+validate the results, run the test scripts and check the results piped
+in the according text output files.
+
+\subsection{Artifact check-list (meta-information)}
+
+{\em Obligatory. Use just a few informal keywords in all fields applicable to your artifacts
+and remove the rest. This information is needed to find appropriate reviewers and gradually 
+unify artifact meta information in Digital Libraries.}
+
+{\small
+\begin{itemize}
+  \item {\bf Algorithm: HLL $\Theta$ Sketch}
+  \item {\bf Program: Java code}
+  \item {\bf Compilation: Each package is compiled using mvn clean PACKAGE}
+  \item {\bf Binary: Java executables}
+  \item {\bf Run-time environment: Java}
+  \item {\bf Hardware: Ubuntu on 12 core server and 32 core server with hyperthreading disabled}
+  \item {\bf Execution: }
+  \item {\bf Metrics: Throughput}
+  \item {\bf Output: Runtime throughputs}
+  \item {\bf Experiments: }
+  \item {\bf How much disk space required (approximately)?: Not much.}
+  \item {\bf How much time is needed to prepare workflow (approximately)?: Using precomipled packages, none.}
+  \item {\bf How much time is needed to complete experiments (approximately)?: 10 hours}
+  \item {\bf Publicly available?: Yes.}
+  \item {\bf Code licenses (if publicly available)?: Apache License 2.0}
+  \item {\bf Data licenses (if publicly available)?: }
+  \item {\bf Workflow framework used?: }
+  \item {\bf Archived (provide DOI)?: }
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Description}
+
+\subsubsection{How delivered}
+
+{\em Obligatory}
+The Apache DataSketches (Incubating) library is an open source project
+under Apache License 2.0, and is hosted with code, API specifications,
+build instructions, and design documentations on Github.
+
+\subsubsection{Hardware dependencies}
+Our tests require a 12 core server and 32 core machine with hyper-threading disabled
+
+\subsubsection{Software dependencies}
+The Apache DataSketches (Incubating) library has been tested on Ubuntu 12.04/14.04,
+and is expected to run correctly under other Linux distributions.
+
+\subsubsection{Data sets}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Installation}
+
+{\em Obligatory}
+
+We have provided the necessary JAR files for recreating our experiment:
+\begin{itemize}
+  \item sketches-core-0.12.1-SNAPSHOT.jar
+  \item memory-0.12.1.jar
+  \item characterization-0.1.0-SNAPSHOT.jar
+\end{itemize}
+
+Alternatively, follow the build instructions on Apache DataSketches (Incubating) apache
+page (https://datasketches.apache.org/), in order to building the above mentioned
+JAR files, now called:
+\begin{itemize}
+  \item incubator-datasketches-java (https://github.com/apache/incubator-datasketches-java)
+  \item incubator-datasketches-memory (https://github.com/apache/incubator-datasketches-memory)
+  \item incubator-datasketches-characterization (https://github.com/apache/incubator-datasketches-characterization)
+\end{itemize}
+\noindent Maven is required to build these JAR files. The version number of incubator-datasketches-java
+and incubator-datasketches-memory must comply with the version numbers required by incubator-datasketches-characterization.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Experiment workflow}
+For convenience, we provide the JAR files required and the configurations
+used to run our tests.
+
+\begin{itemize}
+  \item Clone the repository to the local machine:
+
+  \hrulefill
+  \$ git clone https://github.com/ArikRinberg/incubator-datasketches-characterization
+  \$ cd incubator-datasketches-characterization/artifact
+
+  \hrulefill
+
+  \item Next, run the tests:
+  
+  \hrulefill
+  \$ git clone https://github.com/ArikRinberg/incubator-datasketches-characterization
+  \hrulefill
+
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Evaluation and expected result}
+
+{\em Obligatory}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Experiment customization}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Notes}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Methodology}
+
+Submission, reviewing and badging methodology:
+
+\begin{itemize}
+  \item \url{http://cTuning.org/ae/submission-20190109.html}
+  \item \url{http://cTuning.org/ae/reviewing-20190109.html}
+  \item \url{https://www.acm.org/publications/policies/artifact-review-badging}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% When adding this appendix to your paper, 
+% please remove below part
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
