@@ -16,7 +16,9 @@
 
 \documentclass{sigplanconf}
 
-\usepackage{hyperref}
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+
+\usepackage{framed}
 
 \begin{document}
 
@@ -50,15 +52,15 @@ unify artifact meta information in Digital Libraries.}
 \begin{itemize}
   \item {\bf Algorithm: HLL $\Theta$ Sketch}
   \item {\bf Program: Java code}
-  \item {\bf Compilation: Each package is compiled using mvn clean PACKAGE}
+  \item {\bf Compilation: JDK 8, and each package is compiled using maven}
   \item {\bf Binary: Java executables}
   \item {\bf Run-time environment: Java}
   \item {\bf Hardware: Ubuntu on 12 core server and 32 core server with hyperthreading disabled}
   \item {\bf Execution: }
-  \item {\bf Metrics: Throughput}
-  \item {\bf Output: Runtime throughputs}
+  \item {\bf Metrics: Throughput and accuracy}
+  \item {\bf Output: Runtime throughputs, and runtime accuracy}
   \item {\bf Experiments: }
-  \item {\bf How much disk space required (approximately)?: Not much.}
+  \item {\bf How much disk space required (approximately)?: }
   \item {\bf How much time is needed to prepare workflow (approximately)?: Using precomipled packages, none.}
   \item {\bf How much time is needed to complete experiments (approximately)?: 10 hours}
   \item {\bf Publicly available?: Yes.}
@@ -83,7 +85,8 @@ Our tests require a 12 core server and 32 core machine with hyper-threading disa
 
 \subsubsection{Software dependencies}
 The Apache DataSketches (Incubating) library has been tested on Ubuntu 12.04/14.04,
-and is expected to run correctly under other Linux distributions.
+and is expected to run correctly under other Linux distributions. Building the JAR
+files requires JDK 8; the files don't compile otherwise.
 
 \subsubsection{Data sets}
 
@@ -92,13 +95,17 @@ and is expected to run correctly under other Linux distributions.
 
 {\em Obligatory}
 
-We have provided the necessary JAR files for recreating our experiment:
-\begin{itemize}
-  \item sketches-core-0.12.1-SNAPSHOT.jar
-  \item memory-0.12.1.jar
-  \item characterization-0.1.0-SNAPSHOT.jar
-\end{itemize}
+First, clone the repository:
 
+\begin{framed}
+
+\$ git clone \url{https://github.com/ArikRinberg/FastConcurrentDataSketchesArtifact}
+
+\end{framed}
+
+\noindent We have provided the necessary JAR files for recreating our experiment.
+
+\paragraph{\textbf{Custom compilation.}} 
 Alternatively, follow the build instructions on Apache DataSketches (Incubating) apache
 page (https://datasketches.apache.org/), in order to building the above mentioned
 JAR files, now called:
@@ -107,25 +114,53 @@ JAR files, now called:
   \item incubator-datasketches-memory (https://github.com/apache/incubator-datasketches-memory)
   \item incubator-datasketches-characterization (https://github.com/apache/incubator-datasketches-characterization)
 \end{itemize}
-\noindent Maven is required to build these JAR files. The version number of incubator-datasketches-java
-and incubator-datasketches-memory must comply with the version numbers required by incubator-datasketches-characterization.
 
+\noindent The version number of incubator-datasketches-java
+and incubator-datasketches-memory must comply with the version numbers required by incubator-datasketches-characterization.
+The characterization JAR file is an unsupported open-source code base, and
+does not pretend to have the same level of quality as the primary repositories.
+These characterization tests are often long running (some can run for days) and very resource intensive, which makes
+them unsuitable for including in unit tests. The code in this repository are some of
+the test suites we use to create some of the plots on our website and provide evidence for our speed and accuracy claims. 
+
+For convenience we have included these repositories as modules in our main repository along with specific branches and commit id's
+that are known to compile. To compile the jar files:
+\begin{framed}
+
+\$ git clone \url{https://github.com/ArikRinberg/FastConcurrentDataSketchesArtifact}
+
+\$ cd FastConcurrentDataSketchesArtifact
+
+\$ source customCompile.sh
+
+\end{framed}
+
+\noindent The shell script takes care of initialising the submodules, building the source files, and copying the correct
+JAR files to the current directory.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experiment workflow}
+
+\paragraph{\textbf{Workflow for precompiled JAR files.}}
 For convenience, we provide the JAR files required and the configurations
 used to run our tests.
 
-\begin{itemize}
-  \item Clone the repository to the local machine:
+\begin{enumerate}
+  \item After cloning the repository:
 
   \hrulefill
 
-  \$ git clone https://github.com/ArikRinberg/incubator-datasketches-characterization
-
-  \$ cd incubator-datasketches-characterization/artifact
+  \$ cd FastConcurrentDataSketchesArtifact
 
   \hrulefill
+
+  \noindent In the current working directory, there should either be the following JAR files:
+  \begin{itemize}
+    \item memory-0.12.1.jar
+    \item sketches-core-0.12.1-SNAPSHOT.jar
+    \item characterization-0.1.0-SNAPSHOT.jar
+  \end{itemize}
+
 
   \item Next, run the tests:
 
@@ -136,9 +171,41 @@ used to run our tests.
   \hrulefill
 
   \noindent where FIGURE-XX is the figure that you wish to recreate. The results per
-  experiment are in a file called \${FigureXX}Profile*.txt. 
+  experiment are in a file called \${FigureXX}Profile*.txt.   
 
-\end{itemize}
+\end{enumerate}
+
+TODO:
+Command line:
+java -cp "./*" com.yahoo.sketches.characterization.Job test.conf
+
+
+\paragraph{\textbf{Workflow for custom JAR files.}}
+
+\begin{enumerate}
+  \item After cloning the repository:
+
+  \hrulefill
+
+  \$ cd FastConcurrentDataSketchesArtifact
+
+  \hrulefill
+
+  \noindent In the current working directory, there should either be the following JAR files:
+
+  \begin{itemize}
+    \item datasketches-memory-1.1.0-incubating.jar
+    \item datasketches-java-1.1.0-incubating.jar
+    \item datasketches-characterization-1.0.0-incubating-SNAPSHOT.jar
+  \end{itemize}
+
+\end{enumerate}
+
+TODO:
+Command line :
+java -cp "./*" org.apache.datasketches.Job test.conf
+(mention that JobProfile needs to be altered.)
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Evaluation and expected result}
