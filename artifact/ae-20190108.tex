@@ -120,21 +120,33 @@ used to run our tests.
   \item Clone the repository to the local machine:
 
   \hrulefill
+
   \$ git clone https://github.com/ArikRinberg/incubator-datasketches-characterization
+
   \$ cd incubator-datasketches-characterization/artifact
 
   \hrulefill
 
   \item Next, run the tests:
-  
+
   \hrulefill
-  \$ git clone https://github.com/ArikRinberg/incubator-datasketches-characterization
+
+  \$ java -cp "./*" com.yahoo.sketches.characterization.Job \${FigureXX}JobTest.conf
+
   \hrulefill
+
+  \noindent where FIGURE-XX is the figure that you wish to recreate. The results per
+  experiment are in a file called \${FigureXX}Profile*.txt. 
 
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Evaluation and expected result}
+
+For Figures X,Y and Z, the expected results are runtime throughput in nanoseconds
+per update. These figures show updates per second, therefore a conversion is needed;
+if the result is $x$, then the data-point is $1000/x$. For Figures A and B, the
+expected results are accuracy.
 
 {\em Obligatory}
 
